@@ -24,7 +24,7 @@ Q = exp(alpha .* gamma);
 lab = rgb2lab(rgb);
 a = lab(:,:,2);
 b = lab(:,:,3);
-Chroma = sqrt(a^2 + b^2);
+Chroma = sqrt(a.^2 + b.^2);
 VarianceChroma = var(reshape(Chroma(:,:),[],1));
 
 % calculate saturation
