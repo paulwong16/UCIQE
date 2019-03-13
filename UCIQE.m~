@@ -1,5 +1,14 @@
-clear;
-rgb_in = imread('images.jpg');
+function UCIQE=UCIQE(rgb_in)
+%Calculate UCIQE (Underwater Colour Image Quality Evaluation).
+%
+%Usage
+%     UCIQE_value = UCIQE(RGB_Image)
+%  The implemented algorithm is based on the paper of M. Yang et al.:
+%  An Underwater Color Image Quality Evaluation Metric.
+%
+% Implemented by Z. J. Wang, UAV Lab, National University of Singapore
+% Sept. 2018
+
 
 rgb = double(rgb_in);
 R = rgb(:,:,1);
@@ -24,7 +33,7 @@ Saturation = hsv(:,:,2);
 MeanSaturation = mean(reshape(Saturation(:,:),[],1));
 
 % calculate luminance
-Luminance = hsv(:,:,3);
+Luminance = ((Q.*mx)+(1-Q).*mn)/2;
 
 ContrastLuminance = max(reshape(Luminance(:,:),[],1)) - min(reshape(Luminance(:,:),[],1));
 

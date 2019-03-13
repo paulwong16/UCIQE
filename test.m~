@@ -16,6 +16,8 @@ lab = rgb2lab(rgb);
 a = lab(:,:,2);
 b = lab(:,:,3);
 Chroma = sqrt(a.^2 + b.^2);
+test1 = max(reshape(Chroma(:,:),[],1));
+test2 = min
 StdVarianceChroma = std(reshape(Chroma(:,:),[],1));
 
 % calculate saturation
