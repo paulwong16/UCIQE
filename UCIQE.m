@@ -21,9 +21,10 @@ alpha = 0.01 * (mn ./ mx);
 gamma = 3;
 Q = exp(alpha .* gamma);
 % calculate Chroma
-lab = rgb2lab(rgb);
-a = lab(:,:,2);
-b = lab(:,:,3);
+% lab = rgb2lab(rgb);
+% a = lab(:,:,2);
+% b = lab(:,:,3);
+[l,a,b] = rgb2lab_n(rgb);
 Chroma = sqrt(a.^2 + b.^2);
 StdVarianceChroma = std(reshape(Chroma(:,:),[],1));
 
@@ -33,8 +34,8 @@ Saturation = hsv(:,:,2);
 MeanSaturation = mean(reshape(Saturation(:,:),[],1));
 
 % calculate luminance
-Luminance = hsv(:,:,3);
+% Luminance = hsv(:,:,3);
 
-ContrastLuminance = max(reshape(Luminance(:,:),[],1)) - min(reshape(Luminance(:,:),[],1));
+ContrastLuminance = max(reshape(l(:,:),[],1)) - min(reshape(l(:,:),[],1))
 
 UCIQE = 0.4680 * StdVarianceChroma + 0.2745 * ContrastLuminance + 0.2576 * MeanSaturation;

@@ -24,7 +24,7 @@ Saturation = hsv(:,:,2);
 MeanSaturation = mean(reshape(Saturation(:,:),[],1));
 
 % calculate luminance
-Luminance = hsv(:,:,3);
+% Luminance = hsv(:,:,3);
 
 ContrastLuminance = max(reshape(l(:,:),[],1)) - min(reshape(l(:,:),[],1));
 
