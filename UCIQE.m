@@ -1,4 +1,4 @@
-function UCIQE=UCIQE(rgb_in)
+function UCIQE=UCIQE(rgb_in, c1, c2, c3)
 %Calculate UCIQE (Underwater Colour Image Quality Evaluation).
 %
 %Usage
@@ -8,34 +8,35 @@ function UCIQE=UCIQE(rgb_in)
 %
 % Implemented by Z. J. Wang, UAV Lab, National University of Singapore
 % Sept. 2018
+% Modified at Dec. 2019
 
+if  ~exist( 'c1', 'var' )
+    c1 = 0.4680;
+end
 
-rgb = double(rgb_in);
-R = rgb(:,:,1);
-G = rgb(:,:,2);
-B = rgb(:,:,3);
-mx=max(rgb,[],3);% max of the 3 colors
-mn=min(rgb,[],3);% min of the 3 colors
+if  ~exist( 'c2', 'var' )
+    c2 = 0.2745;
+end
 
-alpha = 0.01 * (mn ./ mx);
-gamma = 3;
-Q = exp(alpha .* gamma);
-% calculate Chroma
-% lab = rgb2lab(rgb);
-% a = lab(:,:,2);
-% b = lab(:,:,3);
-[l,a,b] = rgb2lab_n(rgb);
-Chroma = sqrt(a.^2 + b.^2);
-StdVarianceChroma = std(reshape(Chroma(:,:),[],1));
+if  ~exist( 'c3', 'var' )
+    c3 = 0.2576;
+end
 
-% calculate saturation
-hsv = rgb2hsv(rgb);
-Saturation = hsv(:,:,2);
-MeanSaturation = mean(reshape(Saturation(:,:),[],1));
+lab = rgb2lab_n(rgb_in);
+l = lab(:,:,1);
+a = lab(:,:,2);
+b = lab(:,:,3);
 
-% calculate luminance
-% Luminance = hsv(:,:,3);
+chroma = sqrt(a.^2 + b.^2);
+% average of chroma
+u_c = mean(chroma(:));
+% variance of chroma
+sigma_c = sqrt(mean(mean(chroma.^2 - u_c.^2)));
 
-ContrastLuminance = max(reshape(l(:,:),[],1)) - min(reshape(l(:,:),[],1))
+saturation = chroma ./ l;
+% average of saturation
+u_s = mean(saturation(:));
 
-UCIQE = 0.4680 * StdVarianceChroma + 0.2745 * ContrastLuminance + 0.2576 * MeanSaturation;
+contrast_l = max(l(:)) - min(l(:));
+
+UCIQE = c1 * sigma_c + c2 * contrast_l + c3 *  u_s;
